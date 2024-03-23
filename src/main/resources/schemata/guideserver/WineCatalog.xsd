@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'
+    elementFormDefault="qualified" 
+    attributeFormDefault="unqualified"
+    xmlns:cat      ="http://www.iro.umontreal.ca/lapalme/wine-catalog"
+    targetNamespace="http://www.iro.umontreal.ca/lapalme/wine-catalog">
+ 
+    <!-- needed because this schema will be imported     -->
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" 
+        schemaLocation="xml.xsd"/>
+
+    <xs:element name="wine-catalog">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="wine" type="cat:Wine"/>
+            </xs:sequence>
+            <!-- needed because this schema will be imported...-->
+            <xs:attribute ref="xml:base"/>
+        </xs:complexType>
+    </xs:element> 
+    
+    <xs:complexType name="Wine">
+        <xs:sequence>
+            <xs:element name="properties" type="cat:Properties"/>
+            <xs:element name="origin" type="cat:Origin"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="tasting-note" 
+                    type="cat:Comment" minOccurs="0"/>
+                <xs:element name="food-pairing" 
+                    type="cat:Comment" minOccurs="0"/>
+                <xs:element name="comment" 
+                    type="cat:Comment" minOccurs="0"/>
+            </xs:choice>
+            <xs:element name="price" type="xs:decimal" ></xs:element>
+            <xs:element name="year" type="xs:gYear"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="appellation" type="xs:string"/>
+        <xs:attribute name="classification" type="xs:string"/>
+        <xs:attribute name="code" type="xs:ID"/>
+        <xs:attribute name="format" type="cat:Format"/>
+    </xs:complexType>
+    
+    <xs:complexType name="Properties">
+        <xs:sequence>
+            <xs:element name="color" type="cat:Color"/>
+            <xs:element name="alcoholic-strength" type="cat:Percentage"/>
+            <xs:element name="nature" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Origin">
+        <xs:sequence>
+            <xs:element name="country" type="xs:string"/>
+            <xs:element name="region" type="xs:string"/>
+            <xs:element name="producer" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:simpleType name="Format">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="375ml"/>
+            <xs:enumeration value="750ml"/>
+            <xs:enumeration value="1l"/>
+            <xs:enumeration value="magnum">
+                <xs:annotation>
+                    <xs:documentation> 1.5 litres</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="jeroboam">
+                <xs:annotation>
+                    <xs:documentation> 3 litres</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="rehoboam">
+                <xs:annotation>
+                    <xs:documentation> 4.5 litres</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="mathusalem">
+                <xs:annotation>
+                    <xs:documentation> 6 litres</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="salmanazar">
+                <xs:annotation>
+                    <xs:documentation> 9 litres</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="balthazar">
+                <xs:annotation>
+                    <xs:documentation>12 litres</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="nabuchodonosor">
+                <xs:annotation>
+                    <xs:documentation>15 litres</xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="Comment" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:choice>
+                <xs:element name="emph" type="xs:string"/>
+                <xs:element name="bold" type="xs:string"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+        
+    <xs:simpleType name="Color">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="red"/>
+            <xs:enumeration value="white"/>
+            <xs:enumeration value="rosé"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="Percentage">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="100"/>
+            <xs:fractionDigits value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

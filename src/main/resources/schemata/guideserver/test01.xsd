@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:test="http://rali.iro.umontreal.ca/test"
+    targetNamespace="http://rali.iro.umontreal.ca/test" elementFormDefault="qualified">
+
+    <xs:element name="Test">
+
+        <xs:annotation>
+            <xs:documentation>This is a test.</xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType>
+
+            <xs:annotation>
+                <xs:documentation>Lorem Ipsum is simply dummy text of the printing and typesetting
+                    industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+                    1500s, when an unknown printer took a galley of type and scrambled it to make a
+                    type specimen book. It has survived not only five centuries, but also the leap
+                    into electronic typesetting, remaining essentially unchanged. It was popularised
+                    in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+                    passages, and more recently with desktop publishing software like Aldus
+                    PageMaker including versions of Lorem Ipsum.</xs:documentation>
+            </xs:annotation>
+
+            <xs:sequence>
+                <xs:element name="TextExample" type="test:TextExampleType">
+                </xs:element>
+                <xs:element name="SelectExample">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:token">
+                            <xs:enumeration value="alpha">
+                                <xs:annotation>
+                                    <xs:documentation>This is the doc for alpha</xs:documentation>
+                                </xs:annotation>
+                            </xs:enumeration>
+                            <xs:enumeration value="blue">
+                                <xs:annotation>
+                                    <xs:documentation>This is the doc for blue</xs:documentation>
+                                </xs:annotation>
+                            </xs:enumeration>
+                            <xs:enumeration value="tango"> </xs:enumeration>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="BooleanExample" type="xs:boolean">
+                    <xs:annotation>
+                        <xs:documentation>This is documentation for boolean.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="DateTimeExample" type="xs:dateTime">
+                    <xs:annotation>
+                        <xs:documentation>This is documentation for datetime. This is documentation
+                            for datetime. This is documentation for datetime. This is documentation
+                            for datetime.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+
+                <xs:element name="CardinalityExample">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Cardinality0-1" type="xs:string" minOccurs="0"
+                                maxOccurs="1"/>
+                            <xs:element name="Cardinality0-inf" type="xs:string" minOccurs="0"
+                                maxOccurs="unbounded"/>
+                            <xs:element name="Cardinality2-4" type="xs:string" minOccurs="2"
+                                maxOccurs="4"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                
+                <xs:element name="ElementWithAttributeExample" minOccurs="1" maxOccurs="2">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="AnotherTextExample" type="test:TextExampleType" />
+                        </xs:sequence>
+                        
+                        <xs:attribute name="AttributeTextOptional" type="xs:string" ></xs:attribute>
+                        <xs:attribute name="AttributeTextRequired" type="xs:string" use="required"></xs:attribute>
+                        <xs:attribute name="AttributeDateRequired" type="xs:date" use="required"></xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                
+                <xs:element name="ChoiceExample">
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:element name="ChoiceOne" type="test:TextExampleType" />
+                            <xs:element name="ChoiceTwo" type="test:BooleanExampleType" />
+                            <xs:element name="ChoiceThree" type="test:DateExampleType" maxOccurs="3" />
+                            <xs:element name="ChoiceFour">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="ChoiceFourA" type="xs:IDREF"/>
+                                        <xs:element name="ChoiceFourB" type="xs:IDREF"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                
+                <xs:element name="ElementWithSequenceExample">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="AlphaExample" type="xs:string" />
+                            <xs:element name="BetaExample" type="xs:string" />
+                            <xs:element name="GammaExample" type="xs:string" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="IdExample" type="xs:ID" minOccurs="2" maxOccurs="2" />
+                <xs:element name="IdRefExample" type="xs:IDREF"></xs:element>
+                <xs:element name="PosIntegerRefExample" type="xs:positiveInteger"></xs:element>
+                
+            </xs:sequence>
+        </xs:complexType>
+
+    </xs:element>
+    
+    <xs:simpleType name="TextExampleType" >
+         <xs:annotation>
+             <xs:documentation>This type has documentation.</xs:documentation>
+         </xs:annotation>
+    
+        <xs:restriction base="xs:string"></xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="BooleanExampleType" >
+        <xs:annotation>
+            <xs:documentation>This type has documentation.</xs:documentation>
+        </xs:annotation>
+        
+        <xs:restriction base="xs:boolean"></xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="DateExampleType" >
+        <xs:annotation>
+            <xs:documentation>This type has documentation.</xs:documentation>
+        </xs:annotation>
+        
+        <xs:restriction base="xs:date"></xs:restriction>
+    </xs:simpleType>
+    
+</xs:schema>

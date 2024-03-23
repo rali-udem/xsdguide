@@ -1,0 +1,1256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  elementFormDefault="qualified"
+  xmlns:sarrali      ="http://rali.iro.umontreal.ca/sarrali"  
+  targetNamespace="http://rali.iro.umontreal.ca/sarrali" >
+
+  <xs:element name="SuspiciousActivityReport">
+    <xs:annotation>
+      <xs:documentation>A structure that describes a SAR Report </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:Metadata" />
+        <xs:element ref="sarrali:Data"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Metadata">
+    <xs:annotation>
+      <xs:documentation>A structure that describes Metadata about a related SAR</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:UniqueId"/>
+        <xs:element ref="sarrali:Title"/>
+        <xs:element ref="sarrali:SubmissionSystem"/>
+        <xs:element ref="sarrali:Author"/>
+        <xs:element ref="sarrali:CreationDateTime"/>
+        <xs:element name="DisseminationCriteria" type="sarrali:DisseminationCriteriaType"/>
+        <xs:element ref="sarrali:RelatedSarList" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="UniqueId" type="xs:ID">
+    <xs:annotation>
+      <xs:documentation>An id unique to this report</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:element name="Title" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>A short report title</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:element name="SubmissionSystem">
+    <xs:annotation>
+      <xs:documentation>Element that uniquely identifies an organization and a system where date originated, was submitted from, or is being sent.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:OrganizationName"/>
+        <xs:element ref="sarrali:Identifier"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="OrganizationName" type="xs:string">
+    <xs:annotation><xs:documentation>The organization's name.</xs:documentation></xs:annotation>
+  </xs:element>
+
+  <xs:element name="Identifier" type="xs:NCName">
+    <xs:annotation>
+      <xs:documentation>A name identifying an organization.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:element name="Author">
+    <xs:annotation>
+      <xs:documentation>Contact information for the system owner. Includes a person and organization to contact and their phone number and email address.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+         <xs:element ref="sarrali:AuthorPerson"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="AuthorPerson">
+    <xs:annotation>
+      <xs:documentation>The person who authors the report.</xs:documentation>
+    </xs:annotation>
+    
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:FirstName"/>
+        <xs:element ref="sarrali:LastName"/>
+        <xs:element ref="sarrali:OrganizationName"/>
+        <xs:element ref="sarrali:TelephoneNumber" minOccurs="0" maxOccurs="3"/>
+        <xs:element ref="sarrali:EMailAddress"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="FirstName" type="xs:NCName">
+    <xs:annotation>
+        <xs:documentation>The person's first name.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:element name="LastName" type="xs:NCName">
+    <xs:annotation>
+        <xs:documentation>The person's last name.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:element name="TelephoneNumber" type="xs:string" />
+
+  <xs:element name="EMailAddress">
+    <xs:annotation>
+      <xs:documentation>An electronic mailing address by which a person or organization may be contacted.</xs:documentation>
+    </xs:annotation>
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:pattern value=".+@.+\..+"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+
+  <xs:element name="CreationDateTime" type="xs:dateTime">
+    <xs:annotation>
+      <xs:documentation>Date and time the report was created.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:simpleType name="DisseminationCriteriaType">
+    <xs:annotation>
+      <xs:documentation>This information is provided by the data owner to indicate who is allowed to see the information.  For publish it provides information to the service provider about what can be returned as the result of a search. For search or get results, it provides information to the user so they know the criteria for this information.  Note that this is different from the data sensitivity included at the message level.  The values and their meanings for dissemination criteria are shown below.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="white">
+        <xs:annotation>
+          <xs:documentation>all users are allowed access</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="gray">
+        <xs:annotation>
+          <xs:documentation>the data owner has full access; all other users are provided pointer (i.e. who to contact and how) information only</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="black">
+        <xs:annotation>
+          <xs:documentation>the data owner has full access; all other users receive no information and no indication that there was a hit when performing searches</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="RelatedSarList">
+    <xs:annotation>
+      <xs:documentation>A structure that can contain a list of related SARs</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="sarrali:RelatedSar"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="RelatedSar">
+    <xs:annotation>
+      <xs:documentation>The id of a related SAR.</xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Data">
+    <xs:annotation>
+      <xs:documentation>The primary information contained in a SAR.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="sarrali:EntityPerson"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="sarrali:EntityLocation"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="sarrali:EntityFirearm"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="sarrali:Activity"/>
+        <xs:element minOccurs="0" ref="sarrali:Associations"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="EntityPerson">
+    <xs:annotation>
+      <xs:documentation>An element for a human being.</xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="sarrali:PersonAgeMeasure" minOccurs="0"/>
+        <xs:element ref="sarrali:PersonEyeColorCode" minOccurs="0"/>
+        <xs:element ref="sarrali:PersonHairColorCode" minOccurs="0"/>
+        <xs:element ref="sarrali:PersonHeightMeasure" minOccurs="0"/>
+        <xs:element ref="sarrali:PersonWeightMeasure" minOccurs="0"/>
+        <xs:element ref="sarrali:PersonName" minOccurs="0"/>
+        <xs:element ref="sarrali:PersonRaceCode" minOccurs="0"/>
+        <xs:element ref="sarrali:PersonSexCode" minOccurs="1"/>
+        <xs:element ref="sarrali:PersonBuildText" minOccurs="0"/>
+        <xs:element ref="sarrali:PersonFacialHairText" minOccurs="0"/>
+      </xs:all>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="PersonAgeMeasure">
+    <xs:annotation>
+      <xs:documentation>The age of a person.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice>
+          <xs:element ref="sarrali:MeasureRangeValue">
+            <xs:annotation>
+              <xs:documentation>A range of value, from min value to max value.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element ref="sarrali:MeasurePointValue">
+            <xs:annotation>
+              <xs:documentation>A specific value.</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:choice>
+        <xs:element ref="sarrali:TimeUnitCode"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="TimeUnitCode" type="sarrali:TimeCodeSimpleType"/>
+
+  <xs:element name="PersonEyeColorCode" type="sarrali:EYECodeSimpleType"/>
+
+  <xs:simpleType name="EYECodeSimpleType">
+    <xs:annotation>
+      <xs:documentation>A data type for Eye Color.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="BLK">
+        <xs:annotation>
+          <xs:documentation>BLACK</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BLU">
+        <xs:annotation>
+          <xs:documentation>BLUE</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BRO">
+        <xs:annotation>
+          <xs:documentation>BROWN</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GRN">
+        <xs:annotation>
+          <xs:documentation>GREEN</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GRY">
+        <xs:annotation>
+          <xs:documentation>GRAY</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="HAZ">
+        <xs:annotation>
+          <xs:documentation>HAZEL</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MAR">
+        <xs:annotation>
+          <xs:documentation>MAROON</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MUL">
+        <xs:annotation>
+          <xs:documentation>MULTICOLORED</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PNK">
+        <xs:annotation>
+          <xs:documentation>PINK</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="XXX">
+        <xs:annotation>
+          <xs:documentation>UNKNOWN</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="PersonHairColorCode" type="sarrali:HAICodeSimpleType"/>
+
+  <xs:simpleType name="HAICodeSimpleType">
+    <xs:annotation>
+      <xs:documentation>A data type for Hair Color.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="BLK">
+        <xs:annotation>
+          <xs:documentation>Black</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BLN">
+        <xs:annotation>
+          <xs:documentation>Blond or Strawberry</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BLU">
+        <xs:annotation>
+          <xs:documentation>Blue</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BRO">
+        <xs:annotation>
+          <xs:documentation>Brown</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GRN">
+        <xs:annotation>
+          <xs:documentation>Green</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GRY">
+        <xs:annotation>
+          <xs:documentation>Gray or Partially Gray</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ONG">
+        <xs:annotation>
+          <xs:documentation>Orange</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PLE">
+        <xs:annotation>
+          <xs:documentation>Purple</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PNK">
+        <xs:annotation>
+          <xs:documentation>Pink</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RED">
+        <xs:annotation>
+          <xs:documentation>Red or Auburn</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SDY">
+        <xs:annotation>
+          <xs:documentation>Sandy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="WHI">
+        <xs:annotation>
+          <xs:documentation>White</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="XXX">
+        <xs:annotation>
+          <xs:documentation>UNKNOWN OR COMPLETELY BALD</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="PersonHeightMeasure" type="sarrali:LengthType">
+    <xs:annotation><xs:documentation>The vertical height of a person.</xs:documentation></xs:annotation>
+  </xs:element>
+
+  <xs:complexType name="LengthType">
+    <xs:annotation><xs:documentation>A length.</xs:documentation></xs:annotation>
+    <xs:sequence>
+      <xs:choice>
+        <xs:element ref="sarrali:MeasurePointValue"/>
+        <xs:element ref="sarrali:MeasureRangeValue"/>
+      </xs:choice>
+      <xs:element minOccurs="1" ref="sarrali:LengthUnitCode"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="PersonWeightMeasure">
+    <xs:annotation><xs:documentation>The weight of a person.</xs:documentation></xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:MeasurePointValue"/>
+        <xs:element ref="sarrali:MassUnitCode"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="MeasurePointValue" type="xs:decimal"/>
+
+  <xs:element name="PersonName">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="sarrali:PersonGivenName"/>
+        <xs:element minOccurs="0" ref="sarrali:PersonSurName"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="PersonGivenName" type="xs:NCName">
+    <xs:annotation><xs:documentation>A person's first name.</xs:documentation></xs:annotation>
+  </xs:element>
+  <xs:element name="PersonSurName" type="xs:NCName">
+    <xs:annotation><xs:documentation>A person's last name.</xs:documentation></xs:annotation>
+  </xs:element>
+  <xs:element name="PersonRaceCode" type="sarrali:RACCodeSimpleType"/>
+
+  <xs:simpleType name="RACCodeSimpleType">
+    <xs:annotation>
+      <xs:documentation>A data type for Race.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="A">
+        <xs:annotation>
+          <xs:documentation>ASIAN</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="B">
+        <xs:annotation>
+          <xs:documentation>BLACK</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="I">
+        <xs:annotation>
+          <xs:documentation>AMERICAN INDIAN</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="U">
+        <xs:annotation>
+          <xs:documentation>UNKNOWN</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="M">
+        <xs:annotation>
+          <xs:documentation>MIDDLE EASTERN</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="W">
+        <xs:annotation>
+          <xs:documentation>WHITE</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="PersonSexCode" type="sarrali:SEXCodeSimpleType"/>
+
+  <xs:simpleType name="SEXCodeSimpleType">
+    <xs:annotation>
+      <xs:documentation>A data type for Sex.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="F">
+        <xs:annotation>
+          <xs:documentation>FEMALE</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="M">
+        <xs:annotation>
+          <xs:documentation>MALE</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="U">
+        <xs:annotation>
+          <xs:documentation>UNKNOWN - FOR UNIDENTIFIED ONLY</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="PersonBuildText" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>A physique or shape of a person.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:element name="PersonFacialHairText" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>A kind of facial hair of a person.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:element name="EntityLocation">
+    <xs:complexType>
+      <xs:all>
+        <xs:element minOccurs="1" ref="sarrali:LocationDescriptionText"/>
+        <xs:element minOccurs="0" ref="sarrali:LocationAddress"/>
+        <xs:element minOccurs="0" ref="sarrali:LocationPrecisionText"/>
+      </xs:all>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="LocationDescriptionText" type="xs:string"/>
+
+  <xs:element name="LocationAddress">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:StructuredAddress"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="StructuredAddress">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:LocationStreet"/>
+        <xs:element ref="sarrali:LocationCityName"/>
+        <xs:element ref="sarrali:LocationStateName"/>
+        <xs:element ref="sarrali:LocationPostalCode"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="LocationStreet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:StreetNumberText"/>
+        <xs:element ref="sarrali:StreetName"/>
+        <xs:element ref="sarrali:StreetCategoryText"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="StreetNumberText" type="xs:positiveInteger"/>
+  <xs:element name="StreetName" type="xs:NCName"/>
+  <xs:element name="StreetCategoryText" type="xs:NCName"/>
+  <xs:element name="LocationCityName" type="xs:NCName"/>
+  <xs:element name="LocationStateName" type="xs:NCName"/>
+  <xs:element name="LocationPostalCode" type="xs:string"/>
+  <xs:element name="LocationPrecisionText" type="xs:string"/>
+
+  <xs:element name="EntityFirearm">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:Firearm"/>
+      </xs:sequence>
+      <xs:attribute name="id" use="required" type="xs:ID"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Firearm">
+    <xs:complexType>
+      <xs:all>
+        <xs:element minOccurs="0" ref="sarrali:ItemDescriptionText"/>
+        <xs:element minOccurs="0" ref="sarrali:ItemColorDescriptionText"/>
+        <xs:element minOccurs="0" ref="sarrali:ItemLengthMeasure"/>
+        <xs:element minOccurs="0" ref="sarrali:FirearmCategoryCode"/>
+        <xs:element minOccurs="0" ref="sarrali:FirearmFinishCode"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ItemDescriptionText" type="xs:string"/>
+
+  <xs:element name="ItemColorDescriptionText" type="xs:NCName"/>
+
+  <xs:element name="ItemLengthMeasure" type="sarrali:LengthType"/>
+
+  <xs:element name="FirearmCategoryCode" type="sarrali:TYPCodeSimpleType"/>
+
+  <xs:simpleType name="TYPCodeSimpleType">
+    <xs:annotation>
+      <xs:documentation>A data type for Gun Type.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="A">
+        <xs:annotation>
+          <xs:documentation>Cannon</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="B">
+        <xs:annotation>
+          <xs:documentation>Submachine gun or machine pistol</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="C">
+        <xs:annotation>
+          <xs:documentation>Rifle-shotgun combination</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="D">
+        <xs:annotation>
+          <xs:documentation>Disguised gun</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="E">
+        <xs:annotation>
+          <xs:documentation>Electric shock gun</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="F">
+        <xs:annotation>
+          <xs:documentation>Ammunition</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="G">
+        <xs:annotation>
+          <xs:documentation>Grenade</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="H">
+        <xs:annotation>
+          <xs:documentation>Bomb </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="I">
+        <xs:annotation>
+          <xs:documentation>Mine</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="J">
+        <xs:annotation>
+          <xs:documentation>Missile</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="K">
+        <xs:annotation>
+          <xs:documentation>Rocket</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="M">
+        <xs:annotation>
+          <xs:documentation>Machine gun</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="O">
+        <xs:annotation>
+          <xs:documentation>Mortar</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="P">
+        <xs:annotation>
+          <xs:documentation>Pistol</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Q">
+        <xs:annotation>
+          <xs:documentation>Shotgun pistol</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="R">
+        <xs:annotation>
+          <xs:documentation>Rifle </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="S">
+        <xs:annotation>
+          <xs:documentation>Shotgun</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="V">
+        <xs:annotation>
+          <xs:documentation>Silencer (muffler or sound moderator)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <!--      This could benefit from modification: create a choice in the parent element so that when
+      a Z-type gun is described, one selects a z-type element. Otherwise, use the present type
+      of element.
+-->
+      <xs:enumeration value="Z">
+        <xs:annotation>
+          <xs:documentation>All others (including guns that fire electrically-charged darts).  When the Z code is used, the type of firearm must be described in the MIS Field.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="FirearmFinishCode" type="sarrali:GUNColorFinishCodeSimpleType"/>
+
+  <xs:simpleType name="GUNColorFinishCodeSimpleType">
+    <xs:annotation>
+      <xs:documentation>A data type for Gun Color Finish.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="BGE">
+        <xs:annotation>
+          <xs:documentation>Beige</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BLK">
+        <xs:annotation>
+          <xs:documentation>Black</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BLU">
+        <xs:annotation>
+          <xs:documentation>Blue</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BRO">
+        <xs:annotation>
+          <xs:documentation>Brown</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BRZ">
+        <xs:annotation>
+          <xs:documentation>Bronze</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CAM">
+        <xs:annotation>
+          <xs:documentation>Camouflage</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="COM">
+        <xs:annotation>
+          <xs:documentation>Chrome, Stainless Steel</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CPR">
+        <xs:annotation>
+          <xs:documentation>Copper</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CRM">
+        <xs:annotation>
+          <xs:documentation>Cream, Ivory</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DBL">
+        <xs:annotation>
+          <xs:documentation>Blue, Dark</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DGR">
+        <xs:annotation>
+          <xs:documentation>Green, Dark</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GLD">
+        <xs:annotation>
+          <xs:documentation>Gold</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GRN">
+        <xs:annotation>
+          <xs:documentation>Green</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GRY">
+        <xs:annotation>
+          <xs:documentation>Gray</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="LAV">
+        <xs:annotation>
+          <xs:documentation>Lavendar</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="LBL">
+        <xs:annotation>
+          <xs:documentation>Blue, Light</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="LGR">
+        <xs:annotation>
+          <xs:documentation>Green, Light</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MAR">
+        <xs:annotation>
+          <xs:documentation>Maroon, Burgundy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ONG">
+        <xs:annotation>
+          <xs:documentation>Orange</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PLE">
+        <xs:annotation>
+          <xs:documentation>Purple</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PNK">
+        <xs:annotation>
+          <xs:documentation>Pink</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RED">
+        <xs:annotation>
+          <xs:documentation>Red</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SIL">
+        <xs:annotation>
+          <xs:documentation>Silver, Aluminum</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TAN">
+        <xs:annotation>
+          <xs:documentation>Tan</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TRQ">
+        <xs:annotation>
+          <xs:documentation>Turquoise</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="WHI">
+        <xs:annotation>
+          <xs:documentation>White</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="YEL">
+        <xs:annotation>
+          <xs:documentation>Yellow</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="Activity">
+    <xs:complexType>
+      <xs:all>
+        <xs:element minOccurs="1" ref="sarrali:ActivityCategoryText"/>
+        <xs:element ref="sarrali:ActivityObject"/>
+        <xs:element ref="sarrali:Witness"/>
+        <xs:element ref="sarrali:Suspect"/>
+        <xs:element minOccurs="1" ref="sarrali:ActivityLocation"/>
+        <xs:element minOccurs="1" ref="sarrali:ActivityDate"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ActivityCategoryText" type="xs:string"/>
+
+  <xs:element name="ActivityObject">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="sarrali:EntityReference"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="EntityReference">
+    <xs:complexType>
+      <xs:attribute name="ref" use="required" type="xs:IDREF"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Witness">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:PersonReference"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Suspect">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:PersonReference"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ActivityLocation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:LocationReference"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ActivityDate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:DateTime"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="DateTime" type="xs:dateTime"/>
+
+  <xs:element name="Associations">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:FamilyAssociation"/>
+        <xs:element ref="sarrali:ResidenceAssociation"/>
+        <xs:element ref="sarrali:StrangerAssociation"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="FamilyAssociation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:FamilyAssociationDescriptionText" minOccurs="1" maxOccurs="1"/>
+        <xs:element maxOccurs="unbounded" ref="sarrali:PersonReference"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ResidenceAssociation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:PersonReference"/>
+        <xs:element ref="sarrali:LocationReference"/>
+        <xs:element ref="sarrali:ResidenceDescriptionText"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ResidenceDescriptionText" type="xs:NCName"/>
+  
+  <xs:element name="FamilyAssociationDescriptionText" type="xs:NCName"/>
+
+  <xs:element name="StrangerAssociation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="sarrali:PersonReference"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="MeasureRangeValue">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sarrali:RangeMinimumValue"/>
+        <xs:element ref="sarrali:RangeMaximumValue"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="RangeMinimumValue" type="xs:decimal"/>
+  <xs:element name="RangeMaximumValue" type="xs:decimal"/>
+
+  <xs:element name="LengthUnitCode" type="sarrali:LengthCodeSimpleType"/>
+
+  <xs:element name="MassUnitCode" type="sarrali:MassCodeSimpleType"/>
+
+  <xs:simpleType name="LengthCodeSimpleType">
+    <xs:annotation>
+      <xs:documentation>A data type for units of measurements for a length value.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="4H">
+        <xs:annotation>
+          <xs:documentation>micrometre (micron)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="77">
+        <xs:annotation>
+          <xs:documentation>milli-inch</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="A11">
+        <xs:annotation>
+          <xs:documentation>angstrom</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="A12">
+        <xs:annotation>
+          <xs:documentation>astronomical unit</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="A45">
+        <xs:annotation>
+          <xs:documentation>decametre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="A71">
+        <xs:annotation>
+          <xs:documentation>femtometre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="AK">
+        <xs:annotation>
+          <xs:documentation>fathom</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="B57">
+        <xs:annotation>
+          <xs:documentation>light year</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="C45">
+        <xs:annotation>
+          <xs:documentation>nanometre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="C52">
+        <xs:annotation>
+          <xs:documentation>picometre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="C63">
+        <xs:annotation>
+          <xs:documentation>parsec</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CMT">
+        <xs:annotation>
+          <xs:documentation>centimetre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DMT">
+        <xs:annotation>
+          <xs:documentation>decimetre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="FOT">
+        <xs:annotation>
+          <xs:documentation>foot</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="HMT">
+        <xs:annotation>
+          <xs:documentation>hectometre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="INH">
+        <xs:annotation>
+          <xs:documentation>inch</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="KMT">
+        <xs:annotation>
+          <xs:documentation>kilometre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="M7">
+        <xs:annotation>
+          <xs:documentation>micro-inch</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MMT">
+        <xs:annotation>
+          <xs:documentation>millimetre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MTR">
+        <xs:annotation>
+          <xs:documentation>metre</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="NMI">
+        <xs:annotation>
+          <xs:documentation>nautical mile</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SMI">
+        <xs:annotation>
+          <xs:documentation>mile (statute mile)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="X1">
+        <xs:annotation>
+          <xs:documentation>chain</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="YRD">
+        <xs:annotation>
+          <xs:documentation>yard</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="MassCodeSimpleType">
+    <xs:annotation>
+      <xs:documentation>A data type for units of measurement for a weight value.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="2U">
+        <xs:annotation>
+          <xs:documentation>megagram</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="APZ">
+        <xs:annotation>
+          <xs:documentation>troy ounce or apothecary ounce</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CGM">
+        <xs:annotation>
+          <xs:documentation>centigram</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CWA">
+        <xs:annotation>
+          <xs:documentation>hundred pounds (cwt) / hundred weight (US)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CWI">
+        <xs:annotation>
+          <xs:documentation>hundred weight (UK)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DG">
+        <xs:annotation>
+          <xs:documentation>decigram</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DJ">
+        <xs:annotation>
+          <xs:documentation>decagram</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DTN">
+        <xs:annotation>
+          <xs:documentation>decitonne</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GRM">
+        <xs:annotation>
+          <xs:documentation>gram</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GRN">
+        <xs:annotation>
+          <xs:documentation>grain</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="HGM">
+        <xs:annotation>
+          <xs:documentation>hectogram</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="KGM">
+        <xs:annotation>
+          <xs:documentation>kilogram</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="KTN">
+        <xs:annotation>
+          <xs:documentation>kilotonne</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="LBR">
+        <xs:annotation>
+          <xs:documentation>pound</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="LTN">
+        <xs:annotation>
+          <xs:documentation>ton (UK) or long ton (US)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Mg">
+        <xs:annotation>
+          <xs:documentation>megagram</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ONZ">
+        <xs:annotation>
+          <xs:documentation>ounce</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="STI">
+        <xs:annotation>
+          <xs:documentation>stone (UK)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="STN">
+        <xs:annotation>
+          <xs:documentation>ton (US) or short ton (UK/US)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TNE">
+        <xs:annotation>
+          <xs:documentation>tonne (metric ton)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="TimeCodeSimpleType">
+    <xs:annotation>
+      <xs:documentation>A data type for units of time.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="ANN">
+        <xs:annotation>
+          <xs:documentation>year</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="B52">
+        <xs:annotation>
+          <xs:documentation>kilosecond</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="B98">
+        <xs:annotation>
+          <xs:documentation>microsecond</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="C26">
+        <xs:annotation>
+          <xs:documentation>millisecond</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="C47">
+        <xs:annotation>
+          <xs:documentation>nanosecond</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="D42">
+        <xs:annotation>
+          <xs:documentation>tropical year</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DAY">
+        <xs:annotation>
+          <xs:documentation>day</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="HUR">
+        <xs:annotation>
+          <xs:documentation>hour</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MIN">
+        <xs:annotation>
+          <xs:documentation>minute [unit of time]</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MON">
+        <xs:annotation>
+          <xs:documentation>month</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SEC">
+        <xs:annotation>
+          <xs:documentation>second [unit of time]</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="WEE">
+        <xs:annotation>
+          <xs:documentation>week</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="PersonReference">
+    <xs:complexType>
+      <xs:attribute name="ref" use="required" type="xs:IDREF"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="LocationReference">
+    <xs:complexType>
+      <xs:attribute name="ref" use="required" type="xs:IDREF"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
